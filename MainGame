@@ -1,0 +1,444 @@
+import time 
+import random
+
+intro = "-"
+for i in range(10):
+    print(intro)
+    intro += "-"
+
+def alert(message):
+    print(" ")
+    print("*" * 50)
+    print(message)
+    print("*" * 50)
+    print(" ")
+
+alert("Welcome to the Magic Mist")
+
+class Hero:
+    Hero = True
+
+char = Hero()
+
+def create_char():
+    char.Name = "scoundrel"
+    char.Character = "boy"
+    char.Level = 1
+    char.Strength = 10
+    char.Attack = 9
+    char.Defense = 9
+    char.Weapon = "kick"
+    char.Exp = 0
+    char.Health = 100
+    char.MaxHealth = 100
+    char.HealthPotion = 0
+
+enemy = ""
+class pig:
+    Name = "pig"
+    Level = 1
+    Strength = 10
+    Attack = 10
+    Defense = 10
+    Weapon = "bite"
+    Exp = 15
+    Health = 30
+    HealthPotion = 0
+
+class lynx:
+    Name = "lynx"
+    Level = 1
+    Strength = 10
+    Attack = 11
+    Defense = 11
+    Weapon = "claws"
+    Exp = 25
+    Health = 45
+    HealthPotion = 0
+
+class ogre:
+    Name = "ogre"
+    Level = 1
+    Strength = 11
+    Attack = 11
+    Defense = 11
+    Weapon = "slam"
+    Exp = 35
+    Health = 60
+    HealthPotion = 0
+
+def RandomEnemy():
+    global enemy
+    N = random.randint(1, 3)
+    if N == 1: enemy = pig()
+    elif N == 2: enemy = ogre()
+    elif N == 3: enemy = lynx()
+    else: print("Fatal error: Enemy cannot load!")
+    enemy.HealthPotion = random.randint(0,1)
+
+def Attack():
+    AttackPt = int((random.random()+1) * int(char.Strength) * int(char.Attack))
+    hit = int(AttackPt / enemy.Defense)
+    enemy.Health -= hit
+    print(" ")
+    print("You used " + char.Weapon)
+    print(" ")
+    time.sleep(2)
+    print("You hit for " + str(hit) + " hit points")
+    time.sleep(1)
+
+def EnemyAttack():
+    AttackPt = int((random.random()+1) * int(enemy.Strength) * int(enemy.Attack))
+    hit = int(AttackPt / char.Defense)
+    char.Health -= hit
+    print(" ")
+    print(enemy.Name + " used " + enemy.Weapon)
+    print(" ")
+    time.sleep(2)
+    print(enemy.Name + " hit for " + str(hit) + " hit points")
+    time.sleep(1)
+
+not_first_fight = False
+
+def Fight():
+    global not_first_fight
+    RandomEnemy()
+    print(" ")
+    print(" ")
+    print(f"You have encountered a {enemy.Name}...")
+    if not_first_fight:
+        while True:
+            fight = input("Fight or runaway? (F/R) >")
+            if fight.upper() == "R":
+                print("You are running away")
+                time.sleep(3)
+                print("You managed to escape the beast, but he hit you on the way")
+                AttackPt = int((random.random()+1) * int(enemy.Strength) * int(enemy.Attack))
+                hit = int(AttackPt / char.Defense)
+                char.Health -= hit
+                time.sleep(3)
+                print(f"You got hit for {str(hit)} hit points")
+                time.sleep(3)
+                return
+            elif fight.upper() == "F":
+                time.sleep(1)
+                break
+            else:
+                print("Please select F or R")
+                continue
+    alert("FIGHT")
+    not_first_fight = True
+    time.sleep(2)
+    while char.Health > 0 and enemy.Health > 0:
+        if char.Health > 0:
+            Attack()
+        if enemy.Health > 0:
+            EnemyAttack()
+    if char.Health > enemy.Health:
+        alert("YOU WIN")
+        time.sleep(2)
+        char.Exp += enemy.Exp
+        print(f"+ {enemy.Exp} XP")
+        if char.Exp > 100:
+            char.Level += 1
+            char.Exp = 0
+            char.Strength += 1
+            char.Defense += 1
+            alert(f"LEVEL UP! You are now level {char.Level}")
+            print("Strength + 1")
+            print("Defense + 1")
+        time.sleep(1)
+        print(f"Your health is {char.Health}")
+        print(" ")
+        time.sleep(2)
+        char.HealthPotion += enemy.HealthPotion
+        if enemy.HealthPotion > 1:
+            print(f"You found {enemy.HealthPotion} Health Potions")
+        elif enemy.HealthPotion == 1:
+            print(f"You found {enemy.HealthPotion} Health Potion")
+        if char.HealthPotion > 0:
+            print(f"You have {char.HealthPotion} health potions")
+            print(" ")
+            while True:
+                UsePotion = input("Use potion? (Y/N) >")
+                if UsePotion.upper() == "Y":
+                    char.Health += 50
+                    char.HealthPotion -= 1
+                    if char.Health > char.MaxHealth:
+                        char.Health = char.MaxHealth
+                    print(" ")
+                    print(f"Your health is {char.Health}")
+                    break
+                elif UsePotion.upper() == "N":
+                    break
+                else:
+                    print("Please select Y or N")
+                    print(" ")
+        print(" ")
+        time.sleep(2)
+    else:
+        print("You died...")
+
+def NewGame():
+    global char
+    create_char()
+    while char.Health > 0:
+        print(" ")
+        print("Elder Gaelic:")
+        print(f"Hey, {char.Name}. What's your name?")
+        print(" ")
+        time.sleep(2)
+        char.Name = input("> ")
+        print(" ")
+        time.sleep(1)
+        print("Elder Gaelic:")
+        print(f"Well, {char.Name}, we could use someone like you, who's not afraid!")
+        time.sleep(3)
+        print("Tell me, what do you want to be when you grow up?")
+        print(" ")
+        time.sleep(3)
+        print("1: Barbarian ")
+        print("2: Witch ")
+        print("3: Plumber ")
+        print(" ")
+
+        while True:
+            aspiration = input("> ")
+            if aspiration == "1": 
+                char.Character = "barbarian"
+                char.Strength += 2
+                char.Defense += 1
+                break
+            elif aspiration == "2": 
+                char.Character = "witch"
+                break
+            elif aspiration == "3": 
+                char.Character = "plumber"
+                char.Strength += 1
+                char.Defense += 1
+                break
+            else: print("Please select a valid input")
+            print(" ")
+        time.sleep(3)
+
+        print("Elder Gaelic: ")
+        print(f"A {char.Character} hmm? Good choice")
+        time.sleep(3)
+
+        alert(f"You are now a {char.Character} on level {char.Level} with health {char.Health}")
+        if char.Character == "barbarian":
+            print("Strength + 2")
+            print("Defense + 1")
+        elif char.Character == "plumber":
+            print("Strength + 1")
+            print("Defense + 1")
+        print(" ")
+        time.sleep(3)
+
+        print("Elder Gaelic:")
+        print("Very well. We need strong hands in the castle of Baelrig.")
+        time.sleep(3)
+        print("You shall the fight the mighty dragon there.")
+        time.sleep(3)
+        print("Let's see how strong you are in battle, hmm!?")
+        time.sleep(3)
+        Fight()
+        if char.Health <= 0:
+            continue
+
+        print(" ")
+        print("Elder Gaelic:")
+        print("That was close. You are not very strong yet!")
+        time.sleep(3)
+        print("Here, take this, it might help you!")
+        time.sleep(3)
+        print("I hope you won't need it!")
+        char.HealthPotion += 1
+        time.sleep(3)
+        print("Health potion + 1")
+        time.sleep(3)
+        print(f"You have {char.HealthPotion} health potions")
+        UsePotion = input("Use potion? (Y/N) ")
+        if UsePotion.upper() == "Y":
+            char.Health += 50
+            char.HealthPotion -= 1
+            if char.Health > char.MaxHealth:
+                char.Health = char.MaxHealth
+        print(f"Your health is {char.Health}")
+        print(" ")
+        time.sleep(3)
+
+        print("Elder Gaelic:")
+        print(f"You also will need a weapon appropriate for a {char.Character}")
+        time.sleep(2)
+        print("Take this.")
+        print(" ")
+        time.sleep(3)
+        if char.Character == "barbarian":
+            char.Weapon = "axe"
+            char.Attack += 2
+            print(f"Obtained {char.Weapon}")
+            print("Attack + 3")
+        elif char.Character == "plumber":
+            char.Weapon = "screwdriver"
+            char.Attack += 1
+            print(f"Obtained {char.Weapon}")
+            print("Attack +1")
+        elif char.Character == "witch":
+            char.Weapon = "fireball spell"
+            char.Attack += 1
+            print(f"Obtained {char.Weapon}")
+            print("Attack + 2")
+        print(" ")
+        time.sleep(3)
+
+        while True:
+            print("Elder Gaelic:")
+            print("Now go to Baelrig")
+            print(" ")
+            time.sleep(3)
+            move = input("Go to Baelrig? (Y/N) >")
+            print(" ")
+            if move.upper() == "Y":
+                time.sleep(3)
+                break
+            elif move.upper() == "N":
+                print("There's nothing more to do here...")
+                print(" ")
+            else:
+                print("Please select Y or N")
+                print(" ")
+            time.sleep(3)
+
+        print("You are entering the Torny Forest towards Baelrig.")
+        time.sleep(3)
+        print("When suddenly...")
+        time.sleep(3)
+        Fight()
+        if char.Health <= 0:
+            continue
+
+        print("You proceed out of the Torny Forest, and over the Black Hills.")
+        time.sleep(3)
+        print("But the Black Hills are also a dangerous place!")
+        time.sleep(3)
+        Fight()
+        if char.Health <= 0:
+            continue
+
+        print("From the Black Hills, you continue through the River Valley that leads to Baelrig")
+        time.sleep(3)
+        print("You are almost there, but what's that sound?")
+        time.sleep(3)
+        Fight()
+        if char.Health <= 0:
+            continue
+
+        alert("YOU HAVE REACHED BAELRIG")
+
+        while True:
+            if char.Health <= 0:
+                break
+            move = input("Go to the gate (Y) or stay in the valley a little longer (N)? >")
+            print("")
+            time.sleep(2)
+            if move.upper() == "Y":
+                print("You go to the gate.")
+                print(" ")
+                time.sleep(2)
+                print("Gatekeeper:")
+                print("Who are you? What is your business in Baelrig?")
+                print(" ")
+                time.sleep(2)
+                print(f"I am {char.Name}, I am a {char.Character}.")
+                print("")
+                time.sleep(2)
+                while True:
+                    print("1: I have come to fight the dragon.")
+                    print("2: I have come to heal the wounded.")
+                    print("3: I have come to fix the pipes.")
+                    enter = input("> ")
+                    print("")
+                    time.sleep(2)
+                    if enter == "1":
+                        print("Gatekeeper:")
+                        print("Huh, Gaelic sent you, did he?")
+                        time.sleep(2)
+                        if char.Level == 1:
+                            print("You don't look strong enough. Come back when you have more experience!")
+                            print(" ")
+                            time.sleep(2)
+                            print("Gatekeeper throws you out into the River Valley...")
+                            print(" ")
+                            time.sleep(2)
+                            Fight()
+                            break
+                        elif char.Level > 1:
+                            print("Good, good. You look strong. You may proceed.")
+                            time.sleep(2)
+                            print("Welcome to Baelrig!")
+                            print(" ")
+                            time.sleep(2)
+                            break
+                    elif enter == "2":
+                        print("Gatekeeper:")
+                        print("You have no medicine! You are lying!")
+                        print(" ")
+                        time.sleep(2)
+                        print("Gatekeeper throws you out into the River Valley...")
+                        print(" ")
+                        time.sleep(2)
+                        Fight()
+                        break
+                    elif enter == "3":
+                        print("Gatekeeper:")
+                        print("What pipes? We don't need any fixing!")
+                        print(" ")
+                        time.sleep(2)
+                        print("Gatekeeper throws you out into the River Valley...")
+                        print(" ")
+                        time.sleep(2)
+                        Fight()
+                        break
+                    else:
+                        print("Please select 1, 2 or 3. Try again.")
+                        continue
+            elif move.upper() == "N":
+                print("Going back to the River Valley...")
+                print("")
+                time.sleep(2)
+                Fight()
+            else:
+                print("Please select Y or N")
+            if char.Level > 1:
+                break
+            else:
+                continue
+
+        if char.Health <= 0:
+            continue
+        alert("YOU HAVE ENTERED BAELRIG")
+        time.sleep(2)
+        print("In Baelrig you can buy new weapons, armor and practice before fighting the dragon.")
+        print(" ")
+        time.sleep(4)
+        alert("CHAPTER 1 COMPLETED")
+        break
+
+while True:
+    Start = input("Play New Game? Y/N >")
+    if Start.upper() =="Y":
+        NewGame()
+        if char.Health > 0:
+            alert("CONGRATULATIONS - YOU WON THE GAME")
+        else:
+            alert("GAME OVER")
+        continue
+    elif Start.upper() =="N":
+        print("Thank you for playing!")
+        break
+    else:
+        print("Please select Y or N")
+        continue
+    break
+
